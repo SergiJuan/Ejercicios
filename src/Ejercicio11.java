@@ -4,30 +4,27 @@ public class Ejercicio11 {
 
     public static final char[] LETTERS = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     public static int intentosAcertados = 0;
+    public static int intentosDisparo = 0;;
 
     public static void main(String[] args) {
         String[][] array = new String[9][9];
         boolean[][] disparos = new boolean[9][9];
         boolean[][] barcos = new boolean[9][9];
-        int intentosDisparo = 0;
-
 
         // Generar
         addShips(barcos);
 
-        while (true) {
+        while (intentosAcertados < 10) {
             contructTable(array, disparos, barcos);
 
             // Mostrar
-            System.out.println("Disparos: "+intentosDisparo);
-            System.out.println("Aciertos: "+intentosAcertados);
             printTable(array);
 
             // Disparo
-            do {
-                intentosDisparo++;
-            } while (getDisparo(disparos, barcos));
+            while (getDisparo(array, disparos, barcos)) {};
         }
+
+        winGame(array);
 
     }
 
@@ -37,7 +34,7 @@ public class Ejercicio11 {
             int fila = (int) (Math.random() * 9);
             int columna = (int) (Math.random() * 9);
 
-            if (!barcos[fila][columna]) {
+            if (!barcos[fila][columna] && !(fila == 0 || columna == 0)) {
                 barcos[fila][columna] = true;
                 barcosColocados++;
             }
@@ -71,6 +68,9 @@ public class Ejercicio11 {
     }
 
     static void printTable(String[][] array) {
+        System.out.println("Disparos: "+intentosDisparo);
+        System.out.println("Aciertos: "+intentosAcertados);
+
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[0].length; j++) {
                 System.out.print(" "+array[i][j]+" ");
@@ -79,7 +79,7 @@ public class Ejercicio11 {
         }
     }
 
-    static boolean getDisparo(boolean[][] disparos, boolean[][] barcos) {
+    static boolean getDisparo(String[][] array, boolean[][] disparos, boolean[][] barcos) {
         Scanner input = new Scanner(System.in);
         String coords;
 
@@ -91,9 +91,9 @@ public class Ejercicio11 {
         String letterString = String.valueOf(LETTERS);
 
         try {
-            if (letterString.contains(coordsArray[0]) && (Integer.parseInt(coordsArray[1]) >= 1 && Integer.parseInt(coordsArray[1]) <= 8)) {
-                System.out.println("--> Disparo realizado!");
+            int numberInt = Integer.parseInt(coordsArray[1]);
 
+            if (letterString.contains(coordsArray[0]) && (numberInt >= 1 && numberInt <= 8)) {
                 int letterInt = 1;
                 for (int i = letterInt; i < 9; i++) {
                     if (coordsArray[0].equalsIgnoreCase(String.valueOf(LETTERS[i]))) {
@@ -102,15 +102,21 @@ public class Ejercicio11 {
                     letterInt++;
                 }
 
-                disparos[letterInt][Integer.parseInt(coordsArray[1])] = true;
+                if (array[letterInt][numberInt].equals("✖")){
+                    System.out.println("¡Ya habias disparado aqui antes!");
+                    return true;
+                }
 
+                System.out.println("--> Disparo realizado!");
+                disparos[letterInt][numberInt] = true;
 
-                if (disparos[letterInt][Integer.parseInt(coordsArray[1])] == barcos[letterInt][Integer.parseInt(coordsArray[1])]) {
+                if (disparos[letterInt][numberInt] == barcos[letterInt][numberInt]) {
                     System.out.println("¡BARCO ALCANZADO!");
                     intentosAcertados++;
                 }
-
+                intentosDisparo++;
                 return false;
+
             } else {
                 System.out.println("¡Coordenadas Incorrectas!");
                 return true;
@@ -118,7 +124,18 @@ public class Ejercicio11 {
         } catch (Exception e) {
             System.out.println("¡Coordenadas Invalidas!");
         }
-
         return true;
+
+    }
+
+    static void winGame(String[][] array) {
+        printTable(array);
+        System.out.println("""
+                -----
+                FELICIDADES!! - HAS HUNDIDO TODOS LOS BARCOS
+                -----
+                """);
+        System.out.println("Disparos: "+intentosDisparo);
+        System.out.println("Aciertos: "+intentosAcertados);
     }
 }
