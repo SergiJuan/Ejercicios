@@ -3,13 +3,19 @@ import java.util.Scanner;
 public class Ejercicio11 {
 
     public static final char[] LETTERS = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+    public static final String SYMBOL_EMPTY = "□";
+    public static final String SYMBOL_DISPARO = "▣";
+    public static final String SYMBOL_DISPARO_ACERTADO = "✖";
+
+    public static final int TABLERO_TAMANO = 9;
+
     public static int intentosAcertados = 0;
     public static int intentosDisparo = 0;;
 
     public static void main(String[] args) {
-        String[][] array = new String[9][9];
-        boolean[][] disparos = new boolean[9][9];
-        boolean[][] barcos = new boolean[9][9];
+        String[][] array = new String[TABLERO_TAMANO][TABLERO_TAMANO];
+        boolean[][] disparos = new boolean[TABLERO_TAMANO][TABLERO_TAMANO];
+        boolean[][] barcos = new boolean[TABLERO_TAMANO][TABLERO_TAMANO];
 
         // Generar
         addShips(barcos);
@@ -31,8 +37,8 @@ public class Ejercicio11 {
     static void addShips(boolean[][] barcos) {
         int barcosColocados = 0;
         while (barcosColocados < 10) {
-            int fila = (int) (Math.random() * 9);
-            int columna = (int) (Math.random() * 9);
+            int fila = (int) (Math.random() * TABLERO_TAMANO);
+            int columna = (int) (Math.random() * TABLERO_TAMANO);
 
             if (!barcos[fila][columna] && !(fila == 0 || columna == 0)) {
                 barcos[fila][columna] = true;
@@ -46,12 +52,12 @@ public class Ejercicio11 {
             for (int j = 0; j < array[0].length; j++) {
                 if (disparos[i][j]) {
                     if (barcos[i][j]) {
-                        array[i][j] = "✖";
+                        array[i][j] = SYMBOL_DISPARO_ACERTADO;
                     } else {
-                        array[i][j] = "▣";
+                        array[i][j] = SYMBOL_DISPARO;
                     }
                 } else {
-                    array[i][j] = "□";
+                    array[i][j] = SYMBOL_EMPTY;
                 }
             }
         }
@@ -102,7 +108,7 @@ public class Ejercicio11 {
                     letterInt++;
                 }
 
-                if (array[letterInt][numberInt].equals("✖")){
+                if (array[letterInt][numberInt].equals(SYMBOL_DISPARO_ACERTADO) || array[letterInt][numberInt].equals(SYMBOL_DISPARO)){
                     System.out.println("¡Ya habias disparado aqui antes!");
                     return true;
                 }
