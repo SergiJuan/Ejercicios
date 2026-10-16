@@ -8,6 +8,7 @@ public class Ejercicio11 {
     public static final String SYMBOL_DISPARO_ACERTADO = "✖";
 
     public static final int TABLERO_TAMANO = 9;
+    public static final int QUANTITY_BARCOS = 60;
 
     public static int intentosAcertados = 0;
     public static int intentosDisparo = 0;;
@@ -20,7 +21,7 @@ public class Ejercicio11 {
         // Generar
         addShips(barcos);
 
-        while (intentosAcertados < 10) {
+        while (intentosAcertados < QUANTITY_BARCOS) {
             contructTable(array, disparos, barcos);
 
             // Mostrar
@@ -36,7 +37,7 @@ public class Ejercicio11 {
 
     static void addShips(boolean[][] barcos) {
         int barcosColocados = 0;
-        while (barcosColocados < 10) {
+        while (barcosColocados < QUANTITY_BARCOS) {
             int fila = (int) (Math.random() * TABLERO_TAMANO);
             int columna = (int) (Math.random() * TABLERO_TAMANO);
 
@@ -63,7 +64,7 @@ public class Ejercicio11 {
         }
 
         // ---
-        for (int i = 1; i <= 8; i++) {
+        for (int i = 1; i <= TABLERO_TAMANO-1; i++) {
             array[0][i] = ""+i;
         }
 
@@ -99,10 +100,10 @@ public class Ejercicio11 {
         try {
             int numberInt = Integer.parseInt(coordsArray[1]);
 
-            if (letterString.contains(coordsArray[0]) && (numberInt >= 1 && numberInt <= 8)) {
+            if (letterString.contains(coordsArray[0].toUpperCase()) && (numberInt >= 1 && numberInt <= TABLERO_TAMANO-1)) {
                 int letterInt = 1;
                 for (int i = letterInt; i < 9; i++) {
-                    if (coordsArray[0].equalsIgnoreCase(String.valueOf(LETTERS[i]))) {
+                    if (coordsArray[0].toUpperCase().equalsIgnoreCase(String.valueOf(LETTERS[i]))) {
                         break;
                     }
                     letterInt++;
